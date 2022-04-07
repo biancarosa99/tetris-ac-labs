@@ -1,7 +1,11 @@
 .board {
-  height: 100px;
-  width: 100px;
+  height: 90vh;
+  width: 500px;
   background-color: aquamarine;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(20, 1fr);
+  grid-gap: 5px;
 }
 
 .container {
@@ -10,4 +14,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.item {
+  grid-column-start: 3;
+  grid-column-end: 4;
+  grid-row-start: 3;
+  grid-row-end: 4;
+  background: red;
 }
