@@ -1,0 +1,12 @@
+.right-panel {
+  width: 400px;
+  height: 90vh;
+  padding-left: 20px;
+  background-color: #1434a4;
+  /* background: #000080; */
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
