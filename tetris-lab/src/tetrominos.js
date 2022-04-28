@@ -1,37 +1,65 @@
-export const i = [[true], [true], [true], [true]];
+export const TETROMINOS = {
+  I: {
+    shape: [[true], [true], [true], [true]],
+    color: "blue",
+  },
 
-export const j = [
-  [false, true],
-  [false, true],
-  [false, true],
-  [true, true],
-];
+  J: {
+    shape: [
+      [false, true],
+      [false, true],
+      [false, true],
+      [true, true],
+    ],
+    color: "orange",
+  },
 
-export const l = [
-  [true, false],
-  [true, false],
-  [true, false],
-  [true, true],
-];
-export const o = [
-  [true, true],
-  [true, true],
-];
+  L: {
+    shape: [
+      [true, false],
+      [true, false],
+      [true, false],
+      [true, true],
+    ],
+    color: "red",
+  },
 
-export const s = [
-  [true, false],
-  [true, true],
-  [false, true],
-];
+  O: {
+    shape: [
+      [true, true],
+      [true, true],
+    ],
+    color: "pink",
+  },
+  S: {
+    shape: [
+      [false, true, true],
+      [true, true, false],
+    ],
+    color: "green",
+  },
+  Z: {
+    shape: [
+      [true, true, false],
+      [false, true, true],
+    ],
+    color: "yellow",
+  },
+  T: {
+    shape: [
+      [true, true, true],
+      [false, true, false],
+    ],
 
-export const z = [
-  [false, true],
-  [true, true],
-  [true, false],
-];
+    color: "purple",
+  },
+};
 
-export const t = [
-  [false, true],
-  [true, true],
-  [false, true],
-];
+export const randomTetromino = () => {
+  const tetrominoShapes = "IJLOSZT";
+
+  const randTetromino =
+    tetrominoShapes[Math.trunc(Math.random() * tetrominoShapes.length)];
+  console.log(TETROMINOS[randTetromino]);
+  return TETROMINOS[randTetromino];
+};
