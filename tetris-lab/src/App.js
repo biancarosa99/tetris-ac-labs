@@ -8,20 +8,18 @@ import { getEmptyBoard } from "./utils/utils";
 import { TileBoard } from "./components/TileBoard/TileBoard";
 import { RightPanel } from "./components/RightPanel/RightPanel";
 import { randomTetromino } from "./tetrominos";
-import { usePlayer } from "./hooks/usePlayer";
+import { useBoard } from "./hooks/useBoard";
 
 function App() {
   const [speed, setSpeed] = useState(1000);
-  const [player, updatePosition, board] = usePlayer();
+  const [updateBoard, board] = useBoard();
 
   const onTick = useCallback(() => {
     console.log("tic tic");
-    updatePosition();
+    updateBoard();
   }, []);
 
   const { isRunning, startTime, stopTime } = useGameTime({ onTick, speed });
-
-  console.log(speed);
 
   return (
     <GameContainer>
