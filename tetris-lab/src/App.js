@@ -4,7 +4,7 @@ import Tetromino from "./Tetromino";
 import { useGameTime } from "./hooks/useGameTime";
 import { useCallback, useState } from "react";
 import { GameContainer } from "./components/GameContainer/GameContainer";
-import { getEmptyBoard } from "./utils/utils";
+import { getEmptyBoard, DIRECTION } from "./utils/utils";
 import { TileBoard } from "./components/TileBoard/TileBoard";
 import { RightPanel } from "./components/RightPanel/RightPanel";
 import { randomTetromino } from "./tetrominos";
@@ -12,17 +12,27 @@ import { useBoard } from "./hooks/useBoard";
 
 function App() {
   const [speed, setSpeed] = useState(1000);
-  const [updateBoard, board] = useBoard();
+  const [updateBoard, board, updatePosition] = useBoard();
 
   const onTick = useCallback(() => {
-    console.log("tic tic");
     updateBoard();
   }, []);
 
   const { isRunning, startTime, stopTime } = useGameTime({ onTick, speed });
 
+  const move = ({ keyCode }) => {
+    console.log('moved....');
+    stopTime();
+    if (keyCode === 37) {
+      updateBoard(DIRECTION.left);
+    } else if (keyCode === 39) {
+      updateBoard(DIRECTION.right);
+    } 
+    startTime();
+  };
+
   return (
-    <GameContainer>
+    <GameContainer keyDown={move}>
       <TileBoard board={board} />
       <RightPanel>
         <button className="button" onClick={startTime} disabled={isRunning}>

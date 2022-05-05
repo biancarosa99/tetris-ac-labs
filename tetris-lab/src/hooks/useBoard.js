@@ -1,41 +1,46 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { randomTetromino } from "../tetrominos";
-import { getEmptyBoard } from "../utils/utils";
-
-const DIRECTION = {
-  up: "up",
-  down: "down",
-};
+import { getEmptyBoard, DIRECTION } from "../utils/utils";
 
 export const useBoard = () => {
   const [board, setBoard] = useState(getEmptyBoard());
+
+  let keyPressed = false;
 
   const player = useRef({
     currentPos: { row: 0, column: 5 },
     tetromino: randomTetromino(),
   });
 
-  useEffect(() => {
-    //updateBoard(board);
-  }, []);
-
   const updatePosition = useCallback((direction = DIRECTION.down) => {
     let verticalAdjustment = 0;
-    if (direction === DIRECTION.down) {
-      verticalAdjustment = 1;
-    } else if (direction === DIRECTION.up) {
-      verticalAdjustment = -1;
+    let horizontalAdjustment = 0;
+
+    switch(direction) {
+      case DIRECTION.up:
+        verticalAdjustment = -1;
+        break;
+      case DIRECTION.down:
+        verticalAdjustment = 1;
+        break;
+      case DIRECTION.left:
+        horizontalAdjustment = -1;
+        break;
+      case DIRECTION.right:
+        horizontalAdjustment = 1;
+        break;
     }
+
     player.current = {
       currentPos: {
         row: player.current.currentPos.row + verticalAdjustment,
-        column: player.current.currentPos.column,
+        column: player.current.currentPos.column + horizontalAdjustment,
       },
       tetromino: player.current.tetromino,
     };
   }, []);
 
-  const updateBoard = () => {
+  const updateBoard = (direction = DIRECTION.down) => {
     //Step 1: sterge pozitia veche
     player.current.tetromino.shape.forEach((row, rowIdx) => {
       row.forEach((val, colIdx) => {
@@ -49,7 +54,8 @@ export const useBoard = () => {
 
     //Step 2: muta piesa
 
-    updatePosition(DIRECTION.down);
+    updatePosition(direction);
+    // moveTetrominoLeftOrRight(moveDirection.right);
 
     //Step 3: check for collisions
 
@@ -79,22 +85,27 @@ export const useBoard = () => {
     }
 
     //Step 5: draw the tetromino
-    player.current.tetromino.shape.forEach((row, rowIdx) => {
-      row.forEach((val, colIdx) => {
-        const row = player.current.currentPos.row + rowIdx;
-        const column = player.current.currentPos.column + colIdx;
+    if (keyPressed === false) {
+      player.current.tetromino.shape.forEach((row, rowIdx) => {
+        row.forEach((val, colIdx) => {
+          const row = player.current.currentPos.row + rowIdx;
+          const column = player.current.currentPos.column + colIdx;
 
-        if (val === true) {
-          board[row][column] = player.current.tetromino.color;
-        }
+          if (val === true) {
+            board[row][column] = player.current.tetromino.color;
+          }
+        });
       });
-    });
+    } else {
+      keyPressed = false;
+    }
 
     if (isCollided) {
       player.current = {
         currentPos: { row: 0, column: 5 },
         tetromino: randomTetromino(),
       };
+      keyPressed = false;
     }
     setBoard([...board]);
   };

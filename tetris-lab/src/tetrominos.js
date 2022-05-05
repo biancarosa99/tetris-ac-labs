@@ -60,6 +60,6 @@ export const randomTetromino = () => {
 
   const randTetromino =
     tetrominoShapes[Math.trunc(Math.random() * tetrominoShapes.length)];
-  console.log(randTetromino);
-  return TETROMINOS[randTetromino];
+
+    return TETROMINOS[randTetromino];
 };

@@ -22,3 +22,10 @@ export function getEmptyBoard() {
     [null, null, null, null, null, null, null, null, null, null, null, null],
   ];
 }
+
+export const DIRECTION = {
+  up: "up",
+  down: "down",
+  left: "left",
+  right: "right",
+};
