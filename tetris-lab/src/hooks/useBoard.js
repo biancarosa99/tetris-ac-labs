@@ -1,16 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { randomTetromino } from "../tetrominos";
-import { getEmptyBoard } from "../utils/utils";
-
-const DIRECTION = {
-  up: "up",
-  down: "down",
-};
-
-const moveDirection = {
-  left: "left",
-  right: "right",
-};
+import { getEmptyBoard, DIRECTION } from "../utils/utils";
 
 export const useBoard = () => {
   const [board, setBoard] = useState(getEmptyBoard());
@@ -22,59 +12,35 @@ export const useBoard = () => {
     tetromino: randomTetromino(),
   });
 
-  useEffect(() => {
-    //updateBoard(board);
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("keydown", (event) => {
-      moveTetrominoLeftOrRight(moveDirection.right);
-    });
-
-    return () => {
-      window.removeEventListener("keydown", (event) => {
-        moveTetrominoLeftOrRight(moveDirection.right);
-      });
-    };
-  });
-
   const updatePosition = useCallback((direction = DIRECTION.down) => {
     let verticalAdjustment = 0;
-    if (direction === DIRECTION.down) {
-      verticalAdjustment = 1;
-    } else if (direction === DIRECTION.up) {
-      verticalAdjustment = -1;
+    let horizontalAdjustment = 0;
+
+    switch(direction) {
+      case DIRECTION.up:
+        verticalAdjustment = -1;
+        break;
+      case DIRECTION.down:
+        verticalAdjustment = 1;
+        break;
+      case DIRECTION.left:
+        horizontalAdjustment = -1;
+        break;
+      case DIRECTION.right:
+        horizontalAdjustment = 1;
+        break;
     }
+
     player.current = {
       currentPos: {
         row: player.current.currentPos.row + verticalAdjustment,
-        column: player.current.currentPos.column,
+        column: player.current.currentPos.column + horizontalAdjustment,
       },
       tetromino: player.current.tetromino,
     };
   }, []);
 
-  const moveTetrominoLeftOrRight = useCallback((direction = "left") => {
-    let moveCol = -1;
-    if (direction === moveDirection.right) {
-      moveCol = 1;
-    }
-
-    player.current = {
-      currentPos: {
-        row: player.current.currentPos.row,
-        column: player.current.currentPos.column + moveCol,
-      },
-      tetromino: player.current.tetromino,
-    };
-    console.log(
-      player.current.currentPos.row,
-      player.current.currentPos.column,
-      moveCol
-    );
-  }, []);
-
-  const updateBoard = () => {
+  const updateBoard = (direction = DIRECTION.down) => {
     //Step 1: sterge pozitia veche
     player.current.tetromino.shape.forEach((row, rowIdx) => {
       row.forEach((val, colIdx) => {
@@ -88,7 +54,7 @@ export const useBoard = () => {
 
     //Step 2: muta piesa
 
-    updatePosition(DIRECTION.down);
+    updatePosition(direction);
     // moveTetrominoLeftOrRight(moveDirection.right);
 
     //Step 3: check for collisions
