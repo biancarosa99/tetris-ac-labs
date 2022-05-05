@@ -7,8 +7,15 @@ const DIRECTION = {
   down: "down",
 };
 
+const moveDirection = {
+  left: "left",
+  right: "right",
+};
+
 export const useBoard = () => {
   const [board, setBoard] = useState(getEmptyBoard());
+
+  let keyPressed = false;
 
   const player = useRef({
     currentPos: { row: 0, column: 5 },
@@ -18,6 +25,18 @@ export const useBoard = () => {
   useEffect(() => {
     //updateBoard(board);
   }, []);
+
+  useEffect(() => {
+    window.addEventListener("keydown", (event) => {
+      moveTetrominoLeftOrRight(moveDirection.right);
+    });
+
+    return () => {
+      window.removeEventListener("keydown", (event) => {
+        moveTetrominoLeftOrRight(moveDirection.right);
+      });
+    };
+  });
 
   const updatePosition = useCallback((direction = DIRECTION.down) => {
     let verticalAdjustment = 0;
@@ -35,6 +54,26 @@ export const useBoard = () => {
     };
   }, []);
 
+  const moveTetrominoLeftOrRight = useCallback((direction = "left") => {
+    let moveCol = -1;
+    if (direction === moveDirection.right) {
+      moveCol = 1;
+    }
+
+    player.current = {
+      currentPos: {
+        row: player.current.currentPos.row,
+        column: player.current.currentPos.column + moveCol,
+      },
+      tetromino: player.current.tetromino,
+    };
+    console.log(
+      player.current.currentPos.row,
+      player.current.currentPos.column,
+      moveCol
+    );
+  }, []);
+
   const updateBoard = () => {
     //Step 1: sterge pozitia veche
     player.current.tetromino.shape.forEach((row, rowIdx) => {
@@ -50,6 +89,7 @@ export const useBoard = () => {
     //Step 2: muta piesa
 
     updatePosition(DIRECTION.down);
+    // moveTetrominoLeftOrRight(moveDirection.right);
 
     //Step 3: check for collisions
 
@@ -79,22 +119,27 @@ export const useBoard = () => {
     }
 
     //Step 5: draw the tetromino
-    player.current.tetromino.shape.forEach((row, rowIdx) => {
-      row.forEach((val, colIdx) => {
-        const row = player.current.currentPos.row + rowIdx;
-        const column = player.current.currentPos.column + colIdx;
+    if (keyPressed === false) {
+      player.current.tetromino.shape.forEach((row, rowIdx) => {
+        row.forEach((val, colIdx) => {
+          const row = player.current.currentPos.row + rowIdx;
+          const column = player.current.currentPos.column + colIdx;
 
-        if (val === true) {
-          board[row][column] = player.current.tetromino.color;
-        }
+          if (val === true) {
+            board[row][column] = player.current.tetromino.color;
+          }
+        });
       });
-    });
+    } else {
+      keyPressed = false;
+    }
 
     if (isCollided) {
       player.current = {
         currentPos: { row: 0, column: 5 },
         tetromino: randomTetromino(),
       };
+      keyPressed = false;
     }
     setBoard([...board]);
   };
