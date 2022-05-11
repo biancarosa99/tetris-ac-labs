@@ -1,7 +1,7 @@
 export const TETROMINOS = {
   I: {
     shape: [[true], [true], [true], [true]],
-    color: "blue",
+    color: "#0000cd",
   },
 
   J: {
@@ -21,7 +21,7 @@ export const TETROMINOS = {
       [true, false],
       [true, true],
     ],
-    color: "red",
+    color: "#e00000",
   },
 
   O: {
@@ -29,7 +29,7 @@ export const TETROMINOS = {
       [true, true],
       [true, true],
     ],
-    color: "pink",
+    color: "#fc0fc0",
   },
   S: {
     shape: [
@@ -51,7 +51,7 @@ export const TETROMINOS = {
       [false, true, false],
     ],
 
-    color: "purple",
+    color: "#8601af",
   },
 };
 
@@ -61,5 +61,5 @@ export const randomTetromino = () => {
   const randTetromino =
     tetrominoShapes[Math.trunc(Math.random() * tetrominoShapes.length)];
 
-    return TETROMINOS[randTetromino];
+  return TETROMINOS[randTetromino];
 };

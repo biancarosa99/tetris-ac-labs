@@ -52,7 +52,9 @@ function App() {
         >
           GO FASTER
         </button>
-        <span>Time is {isRunning ? "running" : "not running"}</span>
+        <span style={{ marginTop: "50px" }}>
+          Time is {isRunning ? "running" : "not running"}
+        </span>
       </RightPanel>
     </GameContainer>
   );
