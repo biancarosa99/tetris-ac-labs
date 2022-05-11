@@ -21,13 +21,18 @@ function App() {
   const { isRunning, startTime, stopTime } = useGameTime({ onTick, speed });
 
   const move = ({ keyCode }) => {
-    console.log('moved....');
+    console.log("moved....");
     stopTime();
     if (keyCode === 37) {
       updateBoard(DIRECTION.left);
     } else if (keyCode === 39) {
       updateBoard(DIRECTION.right);
-    } 
+    } else if (keyCode === 38) {
+      updateBoard(DIRECTION.down, true);
+    } else if (keyCode === 40) {
+      setSpeed((prev) => setSpeed(prev - 100));
+      console.log(speed);
+    }
     startTime();
   };
 
