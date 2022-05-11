@@ -33,7 +33,8 @@
   border-radius: 12px;
   transition: all 0.5s ease;
 
-  background-color: white;
+  /* background-color: white; */
+  background: #05e0e9;
   color: #1434a4;
   cursor: pointer;
 }

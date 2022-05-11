@@ -15,6 +15,7 @@ export const useBoard = () => {
   let oldTetro = player.current.tetromino.shape;
 
   const rotateTetromino = () => {
+    oldTetro = player.current.tetromino.shape;
     let newTetro = player.current.tetromino.shape[0].map((_, colIndex) =>
       player.current.tetromino.shape.map((row) => row[colIndex])
     );
@@ -94,7 +95,7 @@ export const useBoard = () => {
           ) {
             isCollided = true;
           }
-          if (row > 19 || row < 0 || column < 0 || column > 11) {
+          if (row < 0) {
             outOfBownds = true;
           }
         }
@@ -104,6 +105,7 @@ export const useBoard = () => {
     //Step 4: daca exista coliziune, muta piesa inapoi and clg
     if (isCollided && rotate) {
       player.current.tetromino.shape = oldTetro;
+      updatePosition(getOppositeDirection(direction));
     } else if (isCollided) {
       console.log("Coliziune happened");
       updatePosition(getOppositeDirection(direction));
