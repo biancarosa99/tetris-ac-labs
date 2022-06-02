@@ -9,10 +9,12 @@ import { TileBoard } from "./components/TileBoard/TileBoard";
 import { RightPanel } from "./components/RightPanel/RightPanel";
 import { randomTetromino } from "./tetrominos";
 import { useBoard } from "./hooks/useBoard";
+import useDarkMode from "./hooks/useDarkMode";
+import Navbar from "./components/Navbar";
 
 function App() {
   const [speed, setSpeed] = useState(1000);
-  const [updateBoard, board, updatePosition] = useBoard();
+  const [updateBoard, board, drawPlayer] = useBoard();
 
   const onTick = useCallback(() => {
     updateBoard();
@@ -36,27 +38,49 @@ function App() {
     startTime();
   };
 
+  function onStartHandler() {
+    drawPlayer();
+    startTime();
+  }
+
   return (
-    <GameContainer keyDown={move}>
-      <TileBoard board={board} />
-      <RightPanel>
-        <button className="button" onClick={startTime} disabled={isRunning}>
-          START
-        </button>
-        <button className="button" onClick={stopTime} disabled={!isRunning}>
-          STOP
-        </button>
-        <button
-          className="button"
-          onClick={() => setSpeed((prev) => prev - 100)}
-        >
-          GO FASTER
-        </button>
-        <span style={{ marginTop: "50px" }}>
-          Time is {isRunning ? "running" : "not running"}
-        </span>
-      </RightPanel>
-    </GameContainer>
+    <div className="bg-rose-50 dark:bg-black">
+      <Navbar />
+      <GameContainer
+        // className="bg-slate-900 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl"
+        keyDown={move}
+      >
+        <TileBoard board={board} />
+        <RightPanel>
+          <button
+            className="button from-pink-500 dark:to-blue-500"
+            onClick={onStartHandler}
+            disabled={isRunning}
+          >
+            START
+          </button>
+          <button
+            className="button from-pink-500 dark:to-blue-500"
+            onClick={stopTime}
+            disabled={!isRunning}
+          >
+            STOP
+          </button>
+          <button
+            className="button from-pink-500 dark:to-blue-500"
+            onClick={() => setSpeed((prev) => prev - 100)}
+          >
+            GO FASTER
+          </button>
+          <span
+            className="text-yellow-500 dark:text-blue-500 "
+            style={{ marginTop: "50px" }}
+          >
+            Time is {isRunning ? "running" : "not running"}
+          </span>
+        </RightPanel>
+      </GameContainer>
+    </div>
   );
 }
 
