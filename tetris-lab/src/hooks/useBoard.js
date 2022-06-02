@@ -133,14 +133,67 @@ export const useBoard = () => {
       };
       keyPressed = false;
     } else if (isCollided && direction === DIRECTION.down && !rotate) {
+      let linesToErase = [];
+      for (let i = 0; i < 20; i++) {
+        let isLineComplete = true;
+        for (let j = 0; j < 12; j++) {
+          if (board[i][j] === null) {
+            isLineComplete = false;
+          }
+        }
+        if (isLineComplete) {
+          linesToErase.push(i);
+        }
+      }
+
+      eraseLines(linesToErase, board);
       player.current = {
         currentPos: { row: 0, column: 5 },
         tetromino: randomTetromino(),
       };
+
+      player.current.tetromino.shape.forEach((row, rowIdx) => {
+        row.forEach((val, colIdx) => {
+          const row = player.current.currentPos.row + rowIdx;
+          const column = player.current.currentPos.column + colIdx;
+
+          if (val === true) {
+            board[row][column] = player.current.tetromino.color;
+          }
+        });
+      });
+
       keyPressed = false;
     }
+
     setBoard([...board]);
   };
 
-  return [updateBoard, board];
+  function eraseLines(linesToErase, board) {
+    for (let i = 0; i < linesToErase.length; i++) {
+      let lineIndex = linesToErase[i] - i;
+      for (let m = lineIndex; m > 0; m--) {
+        for (let n = 0; n < 12; n++) {
+          board[m][n] = board[m - 1][n];
+        }
+      }
+    }
+  }
+
+  function drawPlayer() {
+    player.current.tetromino.shape.forEach((row, rowIdx) => {
+      row.forEach((val, colIdx) => {
+        const row = player.current.currentPos.row + rowIdx;
+        const column = player.current.currentPos.column + colIdx;
+
+        if (val === true) {
+          board[row][column] = player.current.tetromino.color;
+        }
+      });
+    });
+
+    setBoard([...board]);
+  }
+
+  return [updateBoard, board, drawPlayer];
 };

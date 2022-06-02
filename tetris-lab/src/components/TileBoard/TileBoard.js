@@ -16,7 +16,7 @@ export function TileBoard({ board }) {
   });
 
   return (
-    <div className="tile-board">
+    <div className="tile-board bg-rose-50 dark:bg-black">
       {tiles.map(({ row, col, color }) => (
         <div
           key={`row-${row}-col-${col}`}
