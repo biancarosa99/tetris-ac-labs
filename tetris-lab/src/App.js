@@ -14,7 +14,7 @@ import Navbar from "./components/Navbar";
 
 function App() {
   const [speed, setSpeed] = useState(1000);
-  const [updateBoard, board, drawPlayer] = useBoard();
+  const [updateBoard, board, drawPlayer, score] = useBoard();
 
   const onTick = useCallback(() => {
     updateBoard();
@@ -32,8 +32,9 @@ function App() {
     } else if (keyCode === 38) {
       updateBoard(DIRECTION.down, true);
     } else if (keyCode === 40) {
-      setSpeed((prev) => setSpeed(prev - 100));
-      console.log(speed);
+      // setSpeed((prev) => setSpeed(prev - 100));
+      //console.log(speed);
+      updateBoard();
     }
     startTime();
   };
@@ -77,6 +78,13 @@ function App() {
             style={{ marginTop: "50px" }}
           >
             Time is {isRunning ? "running" : "not running"}
+          </span>
+
+          <span
+            className="text-yellow-500 dark:text-blue-500 "
+            style={{ marginTop: "50px" }}
+          >
+            Score: {score}
           </span>
         </RightPanel>
       </GameContainer>
