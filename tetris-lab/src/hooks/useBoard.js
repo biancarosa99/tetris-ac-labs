@@ -4,6 +4,7 @@ import { getEmptyBoard, DIRECTION, getOppositeDirection } from "../utils/utils";
 
 export const useBoard = () => {
   const [board, setBoard] = useState(getEmptyBoard());
+  const [score, setScore] = useState(0);
 
   let keyPressed = false;
 
@@ -143,6 +144,7 @@ export const useBoard = () => {
         }
         if (isLineComplete) {
           linesToErase.push(i);
+          setScore((prev) => prev + 1);
         }
       }
 
@@ -171,7 +173,7 @@ export const useBoard = () => {
 
   function eraseLines(linesToErase, board) {
     for (let i = 0; i < linesToErase.length; i++) {
-      let lineIndex = linesToErase[i] - i;
+      let lineIndex = linesToErase[i];
       for (let m = lineIndex; m > 0; m--) {
         for (let n = 0; n < 12; n++) {
           board[m][n] = board[m - 1][n];
@@ -195,5 +197,5 @@ export const useBoard = () => {
     setBoard([...board]);
   }
 
-  return [updateBoard, board, drawPlayer];
+  return [updateBoard, board, drawPlayer, score];
 };
